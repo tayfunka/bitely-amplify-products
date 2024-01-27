@@ -34,6 +34,9 @@ export const handler = async (event) => {
                 body = await deleteProduct(event.pathParameters.id);
                 break;
 
+            case "PUT":
+                body = await updateProduct(event);
+                break;
             default:
                 throw new Error(`Unsupported route: ${event.httpMethod}`);
         }
@@ -42,6 +45,7 @@ export const handler = async (event) => {
         return {
             statusCode: 200,
             headers: {
+                "Access-Control-Allow-Methods": "*",
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*",
             },

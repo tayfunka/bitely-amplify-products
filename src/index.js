@@ -16,12 +16,6 @@ const App = () => {
     const [formState, setFormState] = useState(initialState);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
-
-    const startEditing = () => {
-        setIsEditing(true);
-        setFormState(selectedProduct);
-    };
 
     useEffect(() => {
         getProducts();
@@ -47,7 +41,7 @@ const App = () => {
             const data = await response.json();
             setSelectedProduct(data.body);
         } catch (error) {
-            console.error("Error fetching the product", error);
+            console.error("Error getting the product", error);
         }
     };
 
@@ -82,9 +76,15 @@ const App = () => {
             });
 
             if (response.ok) {
+                // Remove the deleted product from the local state
                 setProducts(
                     products.filter((product) => product.id !== productId)
                 );
+
+                // Clear the selected product
+                setSelectedProduct(null);
+
+                // Trigger a refresh of the products list
                 getProducts();
             } else {
                 console.error("Error deleting the product");
@@ -93,35 +93,6 @@ const App = () => {
             console.error("Error deleting the product", error);
         }
     };
-
-    const updateProduct = async (productId) => {
-        try {
-            const updatedProduct = { ...selectedProduct, ...formState };
-
-            const response = await fetch(`${endPoint}${path}/${productId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedProduct),
-            });
-
-            if (response.ok) {
-                setProducts(
-                    products.map((product) =>
-                        product.id === productId ? updatedProduct : product
-                    )
-                );
-                getProducts();
-                setIsEditing(false);
-            } else {
-                console.error("Error updating the product");
-            }
-        } catch (error) {
-            console.error("Error updating the product", error);
-        }
-    };
-
     return (
         <div style={styles.container}>
             <h2>Bitely Products</h2>
@@ -153,6 +124,9 @@ const App = () => {
                     onClick={() => getProduct(product.id)}
                 >
                     <p style={styles.productName}>{product.name}</p>
+                    <button onClick={getProduct} style={styles.button}>
+                        Detail
+                    </button>
                     <hr />
                 </div>
             ))}
@@ -164,66 +138,21 @@ const App = () => {
                     <p>Name: {selectedProduct.name}</p>
                     <p>Price: {selectedProduct.price}</p>
                     <p>Category: {selectedProduct.category}</p>
-
-                    {isEditing ? (
-                        <>
-                            <input
-                                onChange={(event) =>
-                                    setInput("name", event.target.value)
-                                }
-                                style={styles.input}
-                                value={formState.name}
-                                placeholder="Name"
-                            />
-                            <input
-                                onChange={(event) =>
-                                    setInput("price", event.target.value)
-                                }
-                                style={styles.input}
-                                value={formState.price}
-                                placeholder="Price"
-                            />
-                            <input
-                                onChange={(event) =>
-                                    setInput("category", event.target.value)
-                                }
-                                style={styles.input}
-                                value={formState.category}
-                                placeholder="Category"
-                            />
-                            <button
-                                onClick={() =>
-                                    updateProduct(selectedProduct.id)
-                                }
-                                style={styles.button}
-                            >
-                                SAVE
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <button
-                                onClick={startEditing}
-                                style={styles.button}
-                            >
-                                EDIT
-                            </button>
-                            <button
-                                onClick={() =>
-                                    deleteProduct(selectedProduct.id)
-                                }
-                                style={styles.button}
-                            >
-                                DELETE
-                            </button>
-                        </>
-                    )}
+                    <button
+                        onClick={() => deleteProduct(selectedProduct.id)}
+                        style={styles.button}
+                    >
+                        DELETE
+                    </button>
                 </div>
             )}
         </div>
     );
 };
 const styles = {
+    body: {
+        backgroundColor: "black",
+    },
     container: {
         width: 400,
         margin: "0 auto",
@@ -232,11 +161,17 @@ const styles = {
         justifyContent: "center",
         padding: 20,
     },
-    product: { marginBottom: 15, cursor: "pointer" },
+    product: {
+        marginBottom: 2,
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+    },
     input: {
         border: "none",
         backgroundColor: "#ddd",
-        marginBottom: 10,
+        margin: "10px",
         padding: 8,
         fontSize: 18,
     },
@@ -248,10 +183,13 @@ const styles = {
         color: "white",
         outline: "none",
         fontSize: 18,
-        padding: "12px 0px",
-        margin: "6px",
+        padding: "12px 12px",
+        margin: "12px",
     },
-    selectedProduct: { marginBottom: 15 },
+    selectedProduct: {
+        marginBottom: 15,
+        border: "solid",
+    },
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

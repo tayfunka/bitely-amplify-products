@@ -16,6 +16,12 @@ const App = () => {
     const [formState, setFormState] = useState(initialState);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const startEditing = () => {
+        setIsEditing(true);
+        setFormState(selectedProduct);
+    };
 
     useEffect(() => {
         getProducts();
@@ -31,7 +37,7 @@ const App = () => {
             const data = await response.json();
             setProducts(data.body);
         } catch (error) {
-            console.log("Error fetching the data", error);
+            console.error("Error getting the data", error);
         }
     };
 
@@ -41,7 +47,7 @@ const App = () => {
             const data = await response.json();
             setSelectedProduct(data.body);
         } catch (error) {
-            console.log("Error fetching the product", error);
+            console.error("Error fetching the product", error);
         }
     };
 
@@ -49,8 +55,6 @@ const App = () => {
         try {
             if (!formState.name || !formState.price) return;
             const product = { ...formState };
-            setProducts([...products, product]);
-            setFormState(initialState);
             const response = await fetch(endPoint + path, {
                 method: "POST",
                 headers: {
@@ -58,7 +62,64 @@ const App = () => {
                 },
                 body: JSON.stringify(product),
             });
+            if (response.ok) {
+                setProducts([...products, product]);
+                setFormState(initialState);
+                getProducts();
+            } else {
+                console.error("Error creating the product");
+            }
         } catch (error) {}
+    };
+
+    const deleteProduct = async (productId) => {
+        try {
+            const response = await fetch(`${endPoint}${path}/${productId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                setProducts(
+                    products.filter((product) => product.id !== productId)
+                );
+                getProducts();
+            } else {
+                console.error("Error deleting the product");
+            }
+        } catch (error) {
+            console.error("Error deleting the product", error);
+        }
+    };
+
+    const updateProduct = async (productId) => {
+        try {
+            const updatedProduct = { ...selectedProduct, ...formState };
+
+            const response = await fetch(`${endPoint}${path}/${productId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedProduct),
+            });
+
+            if (response.ok) {
+                setProducts(
+                    products.map((product) =>
+                        product.id === productId ? updatedProduct : product
+                    )
+                );
+                getProducts();
+                setIsEditing(false);
+            } else {
+                console.error("Error updating the product");
+            }
+        } catch (error) {
+            console.error("Error updating the product", error);
+        }
     };
 
     return (
@@ -103,6 +164,60 @@ const App = () => {
                     <p>Name: {selectedProduct.name}</p>
                     <p>Price: {selectedProduct.price}</p>
                     <p>Category: {selectedProduct.category}</p>
+
+                    {isEditing ? (
+                        <>
+                            <input
+                                onChange={(event) =>
+                                    setInput("name", event.target.value)
+                                }
+                                style={styles.input}
+                                value={formState.name}
+                                placeholder="Name"
+                            />
+                            <input
+                                onChange={(event) =>
+                                    setInput("price", event.target.value)
+                                }
+                                style={styles.input}
+                                value={formState.price}
+                                placeholder="Price"
+                            />
+                            <input
+                                onChange={(event) =>
+                                    setInput("category", event.target.value)
+                                }
+                                style={styles.input}
+                                value={formState.category}
+                                placeholder="Category"
+                            />
+                            <button
+                                onClick={() =>
+                                    updateProduct(selectedProduct.id)
+                                }
+                                style={styles.button}
+                            >
+                                SAVE
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                onClick={startEditing}
+                                style={styles.button}
+                            >
+                                EDIT
+                            </button>
+                            <button
+                                onClick={() =>
+                                    deleteProduct(selectedProduct.id)
+                                }
+                                style={styles.button}
+                            >
+                                DELETE
+                            </button>
+                        </>
+                    )}
                 </div>
             )}
         </div>
@@ -128,11 +243,13 @@ const styles = {
     productName: { fontSize: 20, fontWeight: "bold" },
     productPrice: { marginBottom: 0 },
     button: {
+        cursor: "pointer",
         backgroundColor: "black",
         color: "white",
         outline: "none",
         fontSize: 18,
         padding: "12px 0px",
+        margin: "6px",
     },
     selectedProduct: { marginBottom: 15 },
 };

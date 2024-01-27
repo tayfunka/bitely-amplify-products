@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/products/{id}": {
+      "name": "/products/{id}",
+      "lambdaFunction": "bitelyAmplifyProductsFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

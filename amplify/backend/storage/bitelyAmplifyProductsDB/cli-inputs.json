@@ -1,0 +1,10 @@
+{
+  "resourceName": "bitelyAmplifyProductsDB",
+  "tableName": "bitelyAmplifyProductsDB",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

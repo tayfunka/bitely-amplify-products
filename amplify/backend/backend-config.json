@@ -1,0 +1,49 @@
+{
+  "api": {
+    "bitelyAmplifyProductsApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "bitelyAmplifyProductsFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "bitelyAmplifyProductsFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_bitelyAmplifyProductsFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "bitelyAmplifyProductsFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_bitelyAmplifyProductsFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "bitelyAmplifyProductsFunction"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "bitelyAmplifyProductsDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
+  }
+}

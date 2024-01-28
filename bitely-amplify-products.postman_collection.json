@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "bada4eaa-25be-4246-b5e6-1adf1537e631",
+		"name": "bitely-amplify-products",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28281179"
+	},
+	"item": [
+		{
+			"name": "Create Products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"product 10\",\n    \"price\":100,\n    \"category\": \"category_2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://oqdw2svwid.execute-api.eu-north-1.amazonaws.com/dev/products",
+					"protocol": "https",
+					"host": [
+						"oqdw2svwid",
+						"execute-api",
+						"eu-north-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://oqdw2svwid.execute-api.eu-north-1.amazonaws.com/dev/products",
+					"protocol": "https",
+					"host": [
+						"oqdw2svwid",
+						"execute-api",
+						"eu-north-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://oqdw2svwid.execute-api.eu-north-1.amazonaws.com/dev/products/611e074e-e769-41de-814d-f901230414c9",
+					"protocol": "https",
+					"host": [
+						"oqdw2svwid",
+						"execute-api",
+						"eu-north-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"products",
+						"611e074e-e769-41de-814d-f901230414c9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"category\": \"category_5\",\n    \"price\": 25,\n    \"name\": \"product 36\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://oqdw2svwid.execute-api.eu-north-1.amazonaws.com/dev/products/ecbb4e2c-18a8-4eb6-acf4-26f9d2d70b3c",
+					"protocol": "https",
+					"host": [
+						"oqdw2svwid",
+						"execute-api",
+						"eu-north-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"products",
+						"ecbb4e2c-18a8-4eb6-acf4-26f9d2d70b3c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://oqdw2svwid.execute-api.eu-north-1.amazonaws.com/dev/products/611e074e-e769-41de-814d-f901230414c9",
+					"protocol": "https",
+					"host": [
+						"oqdw2svwid",
+						"execute-api",
+						"eu-north-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"products",
+						"611e074e-e769-41de-814d-f901230414c9"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

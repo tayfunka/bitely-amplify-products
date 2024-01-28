@@ -127,7 +127,6 @@ const App = () => {
                     <button onClick={getProduct} style={styles.button}>
                         Detail
                     </button>
-                    <hr />
                 </div>
             ))}
 
@@ -150,9 +149,6 @@ const App = () => {
     );
 };
 const styles = {
-    body: {
-        backgroundColor: "black",
-    },
     container: {
         width: 400,
         margin: "0 auto",

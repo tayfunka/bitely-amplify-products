@@ -45,9 +45,8 @@ export const handler = async (event) => {
         return {
             statusCode: 200,
             headers: {
-                "Access-Control-Allow-Methods": "*",
-                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify({
                 message: `Successfully finished operation: "${event.httpMethod}"`,
